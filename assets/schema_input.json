@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/yourusername/starrseq_ML/master/assets/schema_input.json",
+    "title": "STARR-seq/CapSTARR-seq Pipeline - Input samplesheet schema",
+    "description": "Schema for validating the input samplesheet CSV file",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_-]+$",
+                "description": "Sample identifier (must be unique, alphanumeric with underscores/hyphens)",
+                "errorMessage": "Sample name must be provided and cannot contain spaces or special characters except underscores and hyphens"
+            },
+            "fastq_1": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
+                "description": "Path to FASTQ file for read 1 (or single-end reads)",
+                "errorMessage": "FastQ file for read 1 must be provided, cannot contain spaces and must have extension '.fq', '.fq.gz', '.fastq' or '.fastq.gz'"
+            },
+            "fastq_2": {
+                "type": ["string", "null"],
+                "format": "file-path",
+                "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
+                "description": "Path to FASTQ file for read 2 (paired-end only, leave empty for single-end)",
+                "errorMessage": "FastQ file for read 2 cannot contain spaces and must have extension '.fq', '.fq.gz', '.fastq' or '.fastq.gz'"
+            },
+            "type": {
+                "type": "string",
+                "enum": ["input", "control"],
+                "description": "Sample type: 'input' for STARR-seq/RNA samples, 'control' for plasmid/DNA samples",
+                "errorMessage": "Sample type must be either 'input' or 'control'"
+            }
+        },
+        "required": ["sample", "fastq_1", "type"]
+    }
+}

@@ -1,0 +1,5 @@
+sample,fastq_1,fastq_2,single_end,type,condition
+sample1_input,/path/to/sample1_R1.fastq.gz,/path/to/sample1_R2.fastq.gz,false,input,treatment
+sample1_control,/path/to/control1_R1.fastq.gz,/path/to/control1_R2.fastq.gz,false,control,treatment
+sample2_input,/path/to/sample2_R1.fastq.gz,/path/to/sample2_R2.fastq.gz,false,input,control
+sample2_control,/path/to/control2_R1.fastq.gz,/path/to/control2_R2.fastq.gz,false,control,control

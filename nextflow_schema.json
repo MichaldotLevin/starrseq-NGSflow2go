@@ -1,0 +1,288 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/starrseq-pipeline/master/nextflow_schema.json",
+    "title": "STARR-seq / CapSTARR-seq Pipeline Parameters",
+    "description": "STARR-seq and CapSTARR-seq analysis pipeline converted from Bpipe to Nextflow DSL2",
+    "type": "object",
+    "definitions": {
+        "input_output_options": {
+            "title": "Input/Output Options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": ["input", "outdir"],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to comma-separated file containing information about the samples.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved.",
+                    "default": "./results",
+                    "fa_icon": "fas fa-folder-open"
+                }
+            }
+        },
+        "reference_genome_options": {
+            "title": "Reference Genome Options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Reference genome related files and options.",
+            "required": ["bowtie2_index", "chromsizes"],
+            "properties": {
+                "genome": {
+                    "type": "string",
+                    "description": "Name of reference genome.",
+                    "fa_icon": "fas fa-book"
+                },
+                "bowtie2_index": {
+                    "type": "string",
+                    "description": "Path to Bowtie2 index (base name).",
+                    "fa_icon": "fas fa-file-archive"
+                },
+                "genes_gtf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to GTF file with gene annotations (required for CapSTARR-seq).",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "genes_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to BED file with gene annotations.",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "chromsizes": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to chromosome sizes file.",
+                    "fa_icon": "fas fa-file-alt"
+                }
+            }
+        },
+        "pipeline_mode_options": {
+            "title": "Pipeline Mode Options",
+            "type": "object",
+            "fa_icon": "fas fa-cog",
+            "description": "Options to control pipeline behavior and which mode to run.",
+            "properties": {
+                "capstarrseq_mode": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable CapSTARR-seq mode (includes RNA-seq quantification and differential expression).",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "run_cutadapt": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run adapter trimming with Cutadapt.",
+                    "fa_icon": "fas fa-cut"
+                },
+                "run_fastq_screen": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run FastQ Screen for contamination screening.",
+                    "fa_icon": "fas fa-filter"
+                },
+                "run_deeptools": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run deepTools for coverage and visualization.",
+                    "fa_icon": "fas fa-chart-area"
+                },
+                "run_macs2": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run MACS2 for peak calling.",
+                    "fa_icon": "fas fa-mountain"
+                },
+                "run_starrpeaker": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run STARRPeaker for peak calling.",
+                    "fa_icon": "fas fa-mountain"
+                },
+                "run_phantompeak": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run Phantompeakqualtools for quality metrics.",
+                    "fa_icon": "fas fa-chart-line"
+                },
+                "run_dupradar": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run dupRadar for duplication analysis.",
+                    "fa_icon": "fas fa-clone"
+                }
+            }
+        },
+        "capstarrseq_options": {
+            "title": "CapSTARR-seq Options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Options specific to CapSTARR-seq analysis.",
+            "properties": {
+                "capstarrseq_diffexp": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Use DESeq2 for differential expression (true) or fold-change method (false).",
+                    "fa_icon": "fas fa-balance-scale"
+                },
+                "deseq2_fdr": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "FDR threshold for DESeq2 differential expression.",
+                    "fa_icon": "fas fa-percentage"
+                },
+                "foldchange_threshold": {
+                    "type": "number",
+                    "default": 2.0,
+                    "description": "Fold-change threshold for differential expression.",
+                    "fa_icon": "fas fa-arrows-alt-h"
+                }
+            }
+        },
+        "trimming_options": {
+            "title": "Read Trimming Options",
+            "type": "object",
+            "fa_icon": "fas fa-cut",
+            "description": "Options for read trimming with Cutadapt.",
+            "properties": {
+                "cutadapt_adapter": {
+                    "type": "string",
+                    "default": "AGATCGGAAGAGC",
+                    "description": "Adapter sequence to trim.",
+                    "fa_icon": "fas fa-font"
+                },
+                "cutadapt_min_length": {
+                    "type": "integer",
+                    "default": 20,
+                    "description": "Minimum read length after trimming.",
+                    "fa_icon": "fas fa-ruler"
+                }
+            }
+        },
+        "alignment_options": {
+            "title": "Alignment Options",
+            "type": "object",
+            "fa_icon": "fas fa-align-center",
+            "description": "Options for read alignment with Bowtie2.",
+            "properties": {
+                "bowtie2_args": {
+                    "type": "string",
+                    "default": "--very-sensitive --no-mixed --no-discordant",
+                    "description": "Additional arguments for Bowtie2.",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "markdup_method": {
+                    "type": "string",
+                    "default": "picard",
+                    "enum": ["picard", "samtools"],
+                    "description": "Tool to use for marking duplicates.",
+                    "fa_icon": "fas fa-clone"
+                }
+            }
+        },
+        "peak_calling_options": {
+            "title": "Peak Calling Options",
+            "type": "object",
+            "fa_icon": "fas fa-mountain",
+            "description": "Options for peak calling with MACS2 or STARRPeaker.",
+            "properties": {
+                "macs2_gsize": {
+                    "type": "string",
+                    "default": "hs",
+                    "description": "Effective genome size for MACS2 (hs, mm, ce, dm).",
+                    "fa_icon": "fas fa-ruler-horizontal"
+                },
+                "macs2_qvalue": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Q-value threshold for MACS2 peak calling.",
+                    "fa_icon": "fas fa-percentage"
+                }
+            }
+        },
+        "quantification_options": {
+            "title": "RNA-seq Quantification Options",
+            "type": "object",
+            "fa_icon": "fas fa-calculator",
+            "description": "Options for RNA-seq quantification with featureCounts.",
+            "properties": {
+                "featurecounts_args": {
+                    "type": "string",
+                    "default": "-t exon -g gene_id",
+                    "description": "Additional arguments for featureCounts.",
+                    "fa_icon": "fas fa-terminal"
+                }
+            }
+        },
+        "qc_options": {
+            "title": "QC Options",
+            "type": "object",
+            "fa_icon": "fas fa-check-circle",
+            "description": "Options for quality control and reporting.",
+            "properties": {
+                "fastq_screen_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to FastQ Screen configuration file.",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "multiqc_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to MultiQC configuration file.",
+                    "fa_icon": "fas fa-file-alt"
+                }
+            }
+        },
+        "max_job_request_options": {
+            "title": "Max Job Request Options",
+            "type": "object",
+            "fa_icon": "fab fa-acquisitions-incorporated",
+            "description": "Set the top limit for requested resources for any single job.",
+            "properties": {
+                "max_cpus": {
+                    "type": "integer",
+                    "description": "Maximum number of CPUs that can be requested for any single job.",
+                    "default": 16,
+                    "fa_icon": "fas fa-microchip",
+                    "hidden": true
+                },
+                "max_memory": {
+                    "type": "string",
+                    "description": "Maximum amount of memory that can be requested for any single job.",
+                    "default": "128.GB",
+                    "fa_icon": "fas fa-memory",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "hidden": true
+                },
+                "max_time": {
+                    "type": "string",
+                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "default": "240.h",
+                    "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
+                    "hidden": true
+                }
+            }
+        }
+    },
+    "allOf": [
+        {"$ref": "#/definitions/input_output_options"},
+        {"$ref": "#/definitions/reference_genome_options"},
+        {"$ref": "#/definitions/pipeline_mode_options"},
+        {"$ref": "#/definitions/capstarrseq_options"},
+        {"$ref": "#/definitions/trimming_options"},
+        {"$ref": "#/definitions/alignment_options"},
+        {"$ref": "#/definitions/peak_calling_options"},
+        {"$ref": "#/definitions/quantification_options"},
+        {"$ref": "#/definitions/qc_options"},
+        {"$ref": "#/definitions/max_job_request_options"}
+    ]
+}
