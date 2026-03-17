@@ -1,5 +1,0 @@
-BAMindexer_vars=[
-]
-
-load PIPELINE_ROOT + "/modules/NGS/bamindexer.groovy"
-
