@@ -1,0 +1,51 @@
+##########################################################################################
+# EXAMPLE: CapSTARR-seq Analysis with DESeq2
+##########################################################################################
+# This example shows configuration for CapSTARR-seq with RNA-seq quantification
+# and differential expression analysis using DESeq2.
+##########################################################################################
+
+# Input/Output
+input: 'capstarrseq_samples.csv'
+outdir: 'results_capstarrseq'
+
+# Pipeline Mode - CapSTARR-seq mode enabled
+capstarrseq_mode: true
+
+# Reference Genome
+genome: 'hg38'
+bowtie2_index: '/data/genomes/hg38/bowtie2/hg38'
+genes_gtf: '/data/genomes/hg38/gencode.v38.annotation.gtf'
+chromsizes: '/data/genomes/hg38/hg38.chrom.sizes'
+
+# Analysis Steps
+run_cutadapt: true
+run_fastq_screen: false
+run_deeptools: true
+run_macs2: false
+run_starrpeaker: false
+run_phantompeak: false
+run_dupradar: true
+
+# CapSTARR-seq Differential Expression
+capstarrseq_diffexp: true  # Use DESeq2
+deseq2_fdr: 0.05
+foldchange_threshold: 2.0
+
+# Trimming
+cutadapt_adapter: 'AGATCGGAAGAGC'
+cutadapt_min_length: 20
+
+# Alignment
+bowtie2_args: '--very-sensitive --no-mixed --no-discordant'
+
+# Duplicate handling
+markdup_method: 'picard'
+
+# RNA-seq Quantification
+featurecounts_args: '-t exon -g gene_id'
+
+# Resources
+max_cpus: 16
+max_memory: '128.GB'
+max_time: '240.h'

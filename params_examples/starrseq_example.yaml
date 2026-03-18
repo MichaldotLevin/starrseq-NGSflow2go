@@ -1,0 +1,45 @@
+##########################################################################################
+# EXAMPLE: Standard STARR-seq Analysis
+##########################################################################################
+# This example shows configuration for a typical STARR-seq experiment
+# with peak calling using MACS2 and coverage track generation.
+##########################################################################################
+
+# Input/Output
+input: 'samplesheet.csv'
+outdir: 'results_starrseq'
+
+# Pipeline Mode - Standard STARR-seq (not CapSTARR-seq)
+capstarrseq_mode: false
+
+# Reference Genome
+genome: 'hg38'
+bowtie2_index: '/data/genomes/hg38/bowtie2/hg38'
+chromsizes: '/data/genomes/hg38/hg38.chrom.sizes'
+
+# Analysis Steps
+run_cutadapt: true
+run_fastq_screen: false
+run_deeptools: true
+run_macs2: true
+run_starrpeaker: false
+run_phantompeak: true
+
+# Trimming
+cutadapt_adapter: 'AGATCGGAAGAGC'
+cutadapt_min_length: 20
+
+# Alignment
+bowtie2_args: '--very-sensitive --no-mixed --no-discordant'
+
+# Duplicate handling
+markdup_method: 'picard'
+
+# Peak Calling
+macs2_gsize: 'hs'
+macs2_qvalue: 0.05
+
+# Resources
+max_cpus: 16
+max_memory: '128.GB'
+max_time: '240.h'

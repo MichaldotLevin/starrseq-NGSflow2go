@@ -1,0 +1,264 @@
+##########################################################################################
+# STARR-seq / CapSTARR-seq Pipeline Parameters
+##########################################################################################
+# 
+# This file contains all configurable parameters for the pipeline.
+# Users can edit this file and provide it to Nextflow using: -params-file params.yaml
+#
+# For detailed documentation, see the README.md file.
+##########################################################################################
+
+# =======================================================================================
+# INPUT/OUTPUT OPTIONS
+# =======================================================================================
+
+# Path to the input samplesheet (CSV format)
+# Required columns: sample, fastq_1, fastq_2 (for paired-end), group, replicate
+# Example: assets/samplesheet_example.csv
+input: null
+
+# Directory where results will be saved
+outdir: './results'
+
+# =======================================================================================
+# PIPELINE MODE
+# =======================================================================================
+
+# Enable CapSTARR-seq mode (includes RNA-seq quantification and differential expression)
+# - false: Standard STARR-seq analysis (ChIP-seq-like peak calling)
+# - true:  CapSTARR-seq analysis (includes RNA quantification and differential expression)
+capstarrseq_mode: false
+
+# =======================================================================================
+# REFERENCE GENOME FILES
+# =======================================================================================
+
+# Reference genome name (e.g., 'hg38', 'mm10', 'GRCh38')
+genome: null
+
+# Path to Bowtie2 index (base name without file extensions)
+# Example: '/path/to/bowtie2/hg38'
+# Required for alignment
+bowtie2_index: null
+
+# Path to gene annotations GTF file
+# Required for CapSTARR-seq mode (RNA-seq quantification)
+# Example: '/path/to/genes.gtf'
+genes_gtf: null
+
+# Path to gene annotations BED file (optional)
+genes_bed: null
+
+# Path to chromosome sizes file
+# Required format: tab-separated (chr, size)
+# Example: '/path/to/hg38.chrom.sizes'
+chromsizes: null
+
+# =======================================================================================
+# ANALYSIS OPTIONS - ENABLE/DISABLE STEPS
+# =======================================================================================
+
+# Run adapter trimming with Cutadapt
+run_cutadapt: false
+
+# Run FastQ Screen for contamination screening
+run_fastq_screen: false
+
+# Run deepTools for coverage tracks and visualization
+run_deeptools: true
+
+# Run MACS2 for peak calling
+run_macs2: false
+
+# Run STARRPeaker for STARR-seq specific peak calling
+run_starrpeaker: false
+
+# Run PhantomPeakQualTools for ChIP-seq quality metrics
+run_phantompeak: false
+
+# Run dupRadar for RNA-seq duplication analysis
+# Only relevant in CapSTARR-seq mode
+run_dupradar: false
+
+# =======================================================================================
+# CAPSTARR-SEQ SPECIFIC OPTIONS
+# =======================================================================================
+
+# Method for differential expression analysis in CapSTARR-seq mode
+# - true:  Use DESeq2 for statistical differential expression
+# - false: Use simple fold-change calculation
+capstarrseq_diffexp: true
+
+# False Discovery Rate (FDR) threshold for DESeq2
+# Only used when capstarrseq_diffexp is true
+deseq2_fdr: 0.05
+
+# Fold-change threshold for identifying differential regions
+# Used in fold-change method or as additional filter with DESeq2
+foldchange_threshold: 2.0
+
+# =======================================================================================
+# READ TRIMMING OPTIONS (Cutadapt)
+# =======================================================================================
+
+# Adapter sequence to trim (Illumina TruSeq adapter)
+cutadapt_adapter: 'AGATCGGAAGAGC'
+
+# Minimum read length after trimming (reads shorter than this are discarded)
+cutadapt_min_length: 20
+
+# =======================================================================================
+# ALIGNMENT OPTIONS (Bowtie2)
+# =======================================================================================
+
+# Additional Bowtie2 alignment arguments
+# Default: very sensitive mode, no mixed/discordant alignments
+bowtie2_args: '--very-sensitive --no-mixed --no-discordant'
+
+# =======================================================================================
+# DUPLICATE HANDLING
+# =======================================================================================
+
+# Tool to use for marking duplicate reads
+# Options: 'picard' or 'samtools'
+markdup_method: 'picard'
+
+# =======================================================================================
+# PEAK CALLING OPTIONS (MACS2)
+# =======================================================================================
+
+# Effective genome size for MACS2
+# Options: 'hs' (human), 'mm' (mouse), 'ce' (C. elegans), 'dm' (Drosophila)
+# Or provide exact size (e.g., 2.7e9 for human)
+macs2_gsize: 'hs'
+
+# Q-value (minimum FDR) threshold for MACS2 peak calling
+macs2_qvalue: 0.05
+
+# =======================================================================================
+# RNA-SEQ QUANTIFICATION OPTIONS (featureCounts)
+# =======================================================================================
+
+# Additional featureCounts arguments
+# Default: count exons and group by gene_id
+featurecounts_args: '-t exon -g gene_id'
+
+# =======================================================================================
+# QUALITY CONTROL OPTIONS
+# =======================================================================================
+
+# Path to FastQ Screen configuration file
+# Required if run_fastq_screen is true
+fastq_screen_config: null
+
+# Path to custom MultiQC configuration file (optional)
+multiqc_config: null
+
+# Path to custom MultiQC logo (optional)
+multiqc_logo: null
+
+# =======================================================================================
+# RESOURCE LIMITS
+# =======================================================================================
+# Maximum resources that can be requested for any single job
+# Adjust these based on your compute environment
+
+# Maximum number of CPUs
+max_cpus: 16
+
+# Maximum memory
+max_memory: '128.GB'
+
+# Maximum time
+max_time: '240.h'
+
+# =======================================================================================
+# CONTAINER IMAGES
+# =======================================================================================
+# Specify container images for each tool
+# These can be Docker, Singularity, or Wave container URLs
+# Leave as null to use default containers (if available)
+# 
+# You can use Wave to build containers on-the-fly. For example:
+# fastqc_container: 'https://wave.seqera.io/...'
+
+# Quality Control
+fastqc_container: null
+fastq_screen_container: null
+multiqc_container: null
+
+# Read Processing
+cutadapt_container: null
+
+# Alignment
+bowtie2_container: null
+samtools_container: null
+picard_container: null
+
+# Coverage and Visualization
+deeptools_container: null
+
+# Peak Calling
+macs2_container: null
+starrpeaker_container: null
+phantompeakqualtools_container: null
+
+# RNA-seq Quantification
+subread_container: null
+
+# Differential Expression
+deseq2_container: null
+r_container: null
+
+# Duplication Analysis
+dupradar_container: null
+
+# Base utilities container
+base_container: null
+
+# =======================================================================================
+# ADVANCED OPTIONS
+# =======================================================================================
+# These options are typically not modified by users
+
+# deepTools bamCoverage additional arguments
+# Default: 10bp bins, RPKM normalization
+# deeptools_args: '--binSize 10 --normalizeUsing RPKM'
+
+# =======================================================================================
+# EXAMPLE CONFIGURATIONS
+# =======================================================================================
+#
+# EXAMPLE 1: Standard STARR-seq analysis with MACS2 peak calling
+# -----------------------------------------------------------
+# input: 'samplesheet.csv'
+# outdir: 'results_starrseq'
+# capstarrseq_mode: false
+# bowtie2_index: '/data/genomes/hg38/bowtie2/hg38'
+# chromsizes: '/data/genomes/hg38/hg38.chrom.sizes'
+# run_macs2: true
+# run_deeptools: true
+# macs2_gsize: 'hs'
+#
+# EXAMPLE 2: CapSTARR-seq with DESeq2 differential expression
+# -----------------------------------------------------------
+# input: 'capstarrseq_samples.csv'
+# outdir: 'results_capstarrseq'
+# capstarrseq_mode: true
+# bowtie2_index: '/data/genomes/hg38/bowtie2/hg38'
+# genes_gtf: '/data/genomes/hg38/genes.gtf'
+# chromsizes: '/data/genomes/hg38/hg38.chrom.sizes'
+# capstarrseq_diffexp: true
+# deseq2_fdr: 0.05
+# run_deeptools: true
+#
+# EXAMPLE 3: Full QC with adapter trimming
+# -----------------------------------------------------------
+# input: 'samplesheet.csv'
+# outdir: 'results_fullqc'
+# run_cutadapt: true
+# run_fastq_screen: true
+# run_phantompeak: true
+# fastq_screen_config: 'fastq_screen.conf'
+# cutadapt_adapter: 'AGATCGGAAGAGC'
+#

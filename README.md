@@ -46,7 +46,35 @@ RNA_rep1,/path/to/RNA_rep1_R1.fastq.gz,/path/to/RNA_rep1_R2.fastq.gz,input
 DNA_rep1,/path/to/DNA_rep1_R1.fastq.gz,/path/to/DNA_rep1_R2.fastq.gz,control
 ```
 
-### 3. Run the Pipeline
+### 3. Configure Parameters
+
+**Option A: Use a parameter file (recommended)**
+
+Copy and customize the template parameter file:
+
+```bash
+cp params.yaml my_params.yaml
+# Edit my_params.yaml with your specific settings
+```
+
+Or use one of the example configurations in `params_examples/`:
+- `starrseq_example.yaml` - Standard STARR-seq analysis
+- `capstarrseq_example.yaml` - CapSTARR-seq with DESeq2
+- `test_example.yaml` - Quick test run
+
+**Option B: Use command-line parameters**
+
+Provide parameters directly on the command line (see below).
+
+### 4. Run the Pipeline
+
+**Using a parameter file:**
+
+```bash
+nextflow run main.nf -params-file my_params.yaml -profile docker
+```
+
+**Using command-line parameters:**
 
 ```bash
 nextflow run main.nf \
@@ -54,7 +82,8 @@ nextflow run main.nf \
     --genome hg38 \
     --bowtie2_index /path/to/bowtie2/hg38 \
     --genes_gtf /path/to/genes.gtf \
-    --outdir results
+    --outdir results \
+    -profile docker
 ```
 
 ## Input Samplesheet
@@ -80,6 +109,27 @@ DNA_rep2,data/DNA_rep2_R1.fq.gz,data/DNA_rep2_R2.fq.gz,control
 
 ## Parameters
 
+### Using Parameter Files
+
+The easiest way to configure the pipeline is using a YAML parameter file. We provide:
+
+1. **`params.yaml`** - Complete template with all available parameters and documentation
+2. **`params_examples/`** - Ready-to-use example configurations:
+   - `starrseq_example.yaml` - Standard STARR-seq with MACS2 peak calling
+   - `capstarrseq_example.yaml` - CapSTARR-seq with DESeq2 differential expression
+   - `test_example.yaml` - Quick test run with minimal resources
+
+**Usage:**
+```bash
+# Copy and customize the template
+cp params.yaml my_analysis.yaml
+# Edit my_analysis.yaml with your settings
+# Run the pipeline
+nextflow run main.nf -params-file my_analysis.yaml -profile docker
+```
+
+See `params_examples/README.md` for detailed examples and customization tips.
+
 ### Required Parameters
 
 | Parameter          | Description                                      |
@@ -91,6 +141,9 @@ DNA_rep2,data/DNA_rep2_R1.fq.gz,data/DNA_rep2_R2.fq.gz,control
 | `--outdir`         | Output directory (default: 'results')           |
 
 ### Optional Parameters
+
+> **Note:** All parameters can be set in a YAML file (recommended) or via command line.
+> For a complete list with descriptions, see `params.yaml`.
 
 #### Reference Files
 | Parameter        | Description                              | Default       |

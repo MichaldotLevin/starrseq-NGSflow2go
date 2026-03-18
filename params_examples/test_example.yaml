@@ -1,0 +1,41 @@
+##########################################################################################
+# EXAMPLE: Test Run with Minimal Resources
+##########################################################################################
+# This example shows configuration for a quick test run with reduced resources.
+# Useful for testing the pipeline setup or running on smaller datasets.
+##########################################################################################
+
+# Input/Output
+input: 'test_data/samplesheet.csv'
+outdir: 'test_results'
+
+# Pipeline Mode
+capstarrseq_mode: false
+
+# Reference Genome (use small test genome)
+genome: 'test'
+bowtie2_index: 'test_data/genome/test_genome'
+chromsizes: 'test_data/genome/test.chrom.sizes'
+
+# Analysis Steps - minimal for testing
+run_cutadapt: false
+run_fastq_screen: false
+run_deeptools: true
+run_macs2: true
+run_starrpeaker: false
+run_phantompeak: false
+
+# Alignment
+bowtie2_args: '--very-sensitive'
+
+# Duplicate handling
+markdup_method: 'samtools'  # Faster for testing
+
+# Peak Calling
+macs2_gsize: '1.0e8'  # Small test genome size
+macs2_qvalue: 0.1
+
+# Resources - limited for testing
+max_cpus: 2
+max_memory: '6.GB'
+max_time: '1.h'
