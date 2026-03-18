@@ -49,3 +49,17 @@ featurecounts_args: '-t exon -g gene_id'
 max_cpus: 16
 max_memory: '128.GB'
 max_time: '240.h'
+
+# Container Images - using default BioContainers
+# See params.yaml for complete list with descriptions
+fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+cutadapt_container: 'biocontainers/cutadapt:4.4--py39hf95cd2a_1'
+bowtie2_container: 'biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0'
+samtools_container: 'biocontainers/samtools:1.17--h00cdaf9_0'
+picard_container: 'biocontainers/picard:3.0.0--hdfd78af_1'
+deeptools_container: 'biocontainers/deeptools:3.5.2--pyhdfd78af_1'
+subread_container: 'biocontainers/subread:2.0.3--h7132678_0'
+deseq2_container: 'biocontainers/bioconductor-deseq2:1.36.0--r41hdfd78af_0'
+dupradar_container: 'biocontainers/bioconductor-dupradar:1.26.0--r41hdfd78af_0'
+r_container: 'biocontainers/r-base:4.2.2'
+multiqc_container: 'biocontainers/multiqc:1.15--pyhdfd78af_0'

@@ -175,46 +175,124 @@ max_time: '240.h'
 # =======================================================================================
 # CONTAINER IMAGES
 # =======================================================================================
-# Specify container images for each tool
-# These can be Docker, Singularity, or Wave container URLs
-# Leave as null to use default containers (if available)
+# Configure container images for each tool in the pipeline.
 # 
-# You can use Wave to build containers on-the-fly. For example:
-# fastqc_container: 'https://wave.seqera.io/...'
+# USAGE OPTIONS:
+# 1. Use default BioContainers (recommended) - specify the container image
+# 2. Use custom containers - provide your own registry URL
+# 3. Use Wave-built containers - use Wave URLs for optimized performance
+# 
+# EXAMPLES:
+#   # Use BioContainers (recommended)
+#   fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+#   
+#   # Use Wave container
+#   fastqc_container: 'community.wave.seqera.io/library/fastqc:0.12.1--abc123'
+#   
+#   # Use custom registry
+#   fastqc_container: 'your-registry.io/fastqc:custom'
+#
+# Each process has a fallback to a default container if not specified here.
 
-# Quality Control
-fastqc_container: null
-fastq_screen_container: null
-multiqc_container: null
+# -----------------------------------------------------------------------------
+# Quality Control Tools
+# -----------------------------------------------------------------------------
 
+# FastQC - Quality control for raw sequence data
+# Default: biocontainers/fastqc:0.12.1--hdfd78af_0
+fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+
+# FastQ Screen - Check for contamination
+# Default: biocontainers/fastq-screen:0.15.3--pl5321hdfd78af_0
+fastq_screen_container: 'biocontainers/fastq-screen:0.15.3--pl5321hdfd78af_0'
+
+# MultiQC - Aggregate QC reports
+# Default: biocontainers/multiqc:1.15--pyhdfd78af_0
+multiqc_container: 'biocontainers/multiqc:1.15--pyhdfd78af_0'
+
+# -----------------------------------------------------------------------------
 # Read Processing
-cutadapt_container: null
+# -----------------------------------------------------------------------------
 
-# Alignment
-bowtie2_container: null
-samtools_container: null
-picard_container: null
+# Cutadapt - Adapter trimming and quality filtering
+# Default: biocontainers/cutadapt:4.4--py39hf95cd2a_1
+cutadapt_container: 'biocontainers/cutadapt:4.4--py39hf95cd2a_1'
 
+# -----------------------------------------------------------------------------
+# Alignment Tools
+# -----------------------------------------------------------------------------
+
+# Bowtie2 + Samtools - Read alignment (mulled container)
+# Default: biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0
+bowtie2_container: 'biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0'
+
+# Samtools - BAM file manipulation
+# Default: biocontainers/samtools:1.17--h00cdaf9_0
+samtools_container: 'biocontainers/samtools:1.17--h00cdaf9_0'
+
+# Picard - Mark duplicates and collect metrics
+# Default: biocontainers/picard:3.0.0--hdfd78af_1
+picard_container: 'biocontainers/picard:3.0.0--hdfd78af_1'
+
+# -----------------------------------------------------------------------------
 # Coverage and Visualization
-deeptools_container: null
+# -----------------------------------------------------------------------------
 
+# deepTools - Create bigWig coverage tracks
+# Default: biocontainers/deeptools:3.5.2--pyhdfd78af_1
+deeptools_container: 'biocontainers/deeptools:3.5.2--pyhdfd78af_1'
+
+# -----------------------------------------------------------------------------
 # Peak Calling
-macs2_container: null
-starrpeaker_container: null
-phantompeakqualtools_container: null
+# -----------------------------------------------------------------------------
 
-# RNA-seq Quantification
-subread_container: null
+# MACS2 - Peak caller for ChIP-seq/STARR-seq
+# Default: biocontainers/macs2:2.2.7.1--py39hf95cd2a_4
+macs2_container: 'biocontainers/macs2:2.2.7.1--py39hf95cd2a_4'
 
-# Differential Expression
-deseq2_container: null
-r_container: null
+# STARRPeaker - STARR-seq specific peak caller
+# Default: biocontainers/starrpeaker:1.3.2--pyhdfd78af_0
+starrpeaker_container: 'biocontainers/starrpeaker:1.3.2--pyhdfd78af_0'
 
-# Duplication Analysis
-dupradar_container: null
+# PhantomPeakQualTools - ChIP-seq quality metrics
+# Default: biocontainers/phantompeakqualtools:1.2.2--hdfd78af_2
+phantompeakqualtools_container: 'biocontainers/phantompeakqualtools:1.2.2--hdfd78af_2'
 
-# Base utilities container
-base_container: null
+# -----------------------------------------------------------------------------
+# RNA-seq Quantification (for CapSTARR-seq)
+# -----------------------------------------------------------------------------
+
+# Subread (featureCounts) - Count reads per gene
+# Default: biocontainers/subread:2.0.3--h7132678_0
+subread_container: 'biocontainers/subread:2.0.3--h7132678_0'
+
+# -----------------------------------------------------------------------------
+# Differential Expression (for CapSTARR-seq)
+# -----------------------------------------------------------------------------
+
+# DESeq2 - Differential expression analysis
+# Default: biocontainers/bioconductor-deseq2:1.36.0--r41hdfd78af_0
+deseq2_container: 'biocontainers/bioconductor-deseq2:1.36.0--r41hdfd78af_0'
+
+# R Base - General R scripts (TPM calculation, fold-change)
+# Default: biocontainers/r-base:4.2.2
+r_container: 'biocontainers/r-base:4.2.2'
+
+# -----------------------------------------------------------------------------
+# QC and Analysis Tools
+# -----------------------------------------------------------------------------
+
+# DupRadar - Assess PCR duplication rates
+# Default: biocontainers/bioconductor-dupradar:1.26.0--r41hdfd78af_0
+dupradar_container: 'biocontainers/bioconductor-dupradar:1.26.0--r41hdfd78af_0'
+
+# -----------------------------------------------------------------------------
+# Base Utilities
+# -----------------------------------------------------------------------------
+
+# Base container for simple file manipulation
+# Default: ubuntu:22.04
+base_container: 'ubuntu:22.04'
 
 # =======================================================================================
 # ADVANCED OPTIONS

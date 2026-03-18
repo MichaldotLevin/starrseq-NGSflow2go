@@ -50,6 +50,26 @@ nextflow run main.nf -params-file params_examples/starrseq_example.yaml -profile
 
 ## Customizing Parameters
 
+### 1. Container Images
+All example files include explicit container specifications using BioContainers. You can:
+- **Keep defaults**: Use the BioContainers images specified in the examples (recommended)
+- **Use Wave**: Replace with Wave-built containers for optimized performance
+- **Custom registry**: Specify your own container registry
+
+```yaml
+# Default BioContainers (recommended)
+fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+
+# Wave container
+fastqc_container: 'community.wave.seqera.io/library/fastqc:0.12.1--abc123'
+
+# Custom registry
+fastqc_container: 'your-registry.io/fastqc:custom'
+```
+
+See the main `params.yaml` file for complete container documentation and all available tools.
+
+### 2. File Paths and Basic Setup
 1. **Copy the template**: Start with the main `params.yaml` file or one of the examples
 2. **Edit values**: Modify parameters according to your experiment
 3. **Required parameters**: Make sure to set these minimum required values:
@@ -58,6 +78,7 @@ nextflow run main.nf -params-file params_examples/starrseq_example.yaml -profile
    - `bowtie2_index`: Path to your reference genome index
    - `chromsizes`: Path to chromosome sizes file
    - `genes_gtf`: Required for CapSTARR-seq mode
+   - Container images for each tool you'll use
 
 4. **Save and run**: Save your custom parameter file and provide it to Nextflow
 

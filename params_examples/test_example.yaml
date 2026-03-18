@@ -39,3 +39,12 @@ macs2_qvalue: 0.1
 max_cpus: 2
 max_memory: '6.GB'
 max_time: '1.h'
+
+# Container Images - using default BioContainers
+# See params.yaml for complete list with descriptions
+fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
+bowtie2_container: 'biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0'
+samtools_container: 'biocontainers/samtools:1.17--h00cdaf9_0'
+deeptools_container: 'biocontainers/deeptools:3.5.2--pyhdfd78af_1'
+macs2_container: 'biocontainers/macs2:2.2.7.1--py39hf95cd2a_4'
+multiqc_container: 'biocontainers/multiqc:1.15--pyhdfd78af_0'
