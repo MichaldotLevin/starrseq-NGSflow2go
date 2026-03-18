@@ -3,7 +3,7 @@ process MACS2_CALLPEAK {
     label 'process_medium'
 
     conda 'bioconda::macs2=2.2.7.1'
-    container "${params.macs2_container ?: 'biocontainers/macs2:2.2.7.1--py39hf95cd2a_4'}"
+    container (params.macs2_container ?: 'biocontainers/macs2:2.2.7.1--py39hf95cd2a_4')
 
     input:
     tuple val(meta), path(bam), path(bai)

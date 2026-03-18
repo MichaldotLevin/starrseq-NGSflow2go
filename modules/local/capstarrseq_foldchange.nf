@@ -2,7 +2,7 @@ process CAPSTARRSEQ_FOLDCHANGE {
     label 'process_medium'
 
     conda 'conda-forge::r-base=4.2.2'
-    container "${params.r_container ?: 'biocontainers/r-base:4.2.2'}"
+    container (params.r_container ?: 'biocontainers/r-base:4.2.2')
 
     input:
     path counts

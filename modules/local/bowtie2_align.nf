@@ -3,7 +3,7 @@ process BOWTIE2_ALIGN {
     label 'process_high'
 
     conda 'bioconda::bowtie2=2.5.1 bioconda::samtools=1.17'
-    container "${params.bowtie2_container ?: 'biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0'}"
+    container (params.bowtie2_container ?: 'biocontainers/mulled-v2-ac74a7f02cebcfcc07d8e8d1d750af9c83b4d45a:1744f68fe955578c63054b55309e05b41c37a80d-0')
 
     input:
     tuple val(meta), path(reads)

@@ -3,7 +3,7 @@ process FILTER2HTSEQ {
     label 'process_low'
 
     conda 'conda-forge::sed=4.8'
-    container "${params.base_container ?: 'ubuntu:22.04'}"
+    container (params.base_container ?: 'ubuntu:22.04')
 
     input:
     tuple val(meta), path(counts)

@@ -3,7 +3,7 @@ process DEEPTOOLS_BAMCOVERAGE {
     label 'process_high'
 
     conda 'bioconda::deeptools=3.5.2'
-    container "${params.deeptools_container ?: 'biocontainers/deeptools:3.5.2--pyhdfd78af_1'}"
+    container (params.deeptools_container ?: 'biocontainers/deeptools:3.5.2--pyhdfd78af_1')
 
     input:
     tuple val(meta), path(bam), path(bai)

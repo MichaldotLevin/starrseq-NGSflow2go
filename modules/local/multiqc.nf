@@ -2,7 +2,7 @@ process MULTIQC {
     label 'process_single'
 
     conda 'bioconda::multiqc=1.15'
-    container "${params.multiqc_container ?: 'biocontainers/multiqc:1.15--pyhdfd78af_0'}"
+    container (params.multiqc_container ?: 'biocontainers/multiqc:1.15--pyhdfd78af_0')
 
     input:
     path multiqc_files

@@ -3,7 +3,7 @@ process FASTQ_SCREEN {
     label 'process_medium'
 
     conda 'bioconda::fastq-screen=0.15.3'
-    container "${params.fastq_screen_container ?: 'biocontainers/fastq-screen:0.15.3--pl5321hdfd78af_0'}"
+    container (params.fastq_screen_container ?: 'biocontainers/fastq-screen:0.15.3--pl5321hdfd78af_0')
 
     input:
     tuple val(meta), path(reads)

@@ -3,7 +3,7 @@ process CALCULATE_TPM {
     label 'process_low'
 
     conda 'conda-forge::r-base=4.2.2 bioconda::bioconductor-genomicfeatures=1.48.0'
-    container "${params.r_container ?: 'biocontainers/r-base:4.2.2'}"
+    container (params.r_container ?: 'biocontainers/r-base:4.2.2')
 
     input:
     tuple val(meta), path(counts)

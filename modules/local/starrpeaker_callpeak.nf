@@ -3,7 +3,7 @@ process STARRPEAKER_CALLPEAK {
     label 'process_medium'
 
     conda 'bioconda::starrpeaker=1.3.2'
-    container "${params.starrpeaker_container ?: 'biocontainers/starrpeaker:1.3.2--pyhdfd78af_0'}"
+    container (params.starrpeaker_container ?: 'biocontainers/starrpeaker:1.3.2--pyhdfd78af_0')
 
     input:
     tuple val(meta), path(input_bam), path(control_bam)

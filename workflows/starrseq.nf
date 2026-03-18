@@ -56,7 +56,7 @@ workflow STARRSEQ_WORKFLOW {
     def sorted_unique_ch = SAMTOOLS_SORT.out.bam
 
     // Branch into with/without deduplication
-    sorted_unique_ch.branch { meta, bam ->
+    sorted_unique_ch.branch { _meta, _bam ->
         with_dedup: true
         without_dedup: true
     }.set { branched_ch }
@@ -75,7 +75,7 @@ workflow STARRSEQ_WORKFLOW {
     def all_indexed = with_dedup_indexed.mix(without_dedup_indexed)
 
     // Insert size metrics (paired-end only)
-    PICARD_COLLECTINSERTSIZE(all_indexed.map { meta, bam, bai -> tuple(meta, bam) })
+    PICARD_COLLECTINSERTSIZE(all_indexed.map { meta, bam, _bai -> tuple(meta, bam) })
 
     // Coverage tracks
     if (params.run_deeptools) {
@@ -93,8 +93,8 @@ workflow STARRSEQ_WORKFLOW {
     // Peak calling with STARRPeaker
     if (params.run_starrpeaker) {
         // Split into input and control
-        def input_bams = all_indexed.filter { meta, bam, bai -> meta.type == 'input' }
-        def control_bams = all_indexed.filter { meta, bam, bai -> meta.type == 'control' }
+        def input_bams = all_indexed.filter { meta, _bam, _bai -> meta.type == 'input' }
+        def control_bams = all_indexed.filter { meta, _bam, _bai -> meta.type == 'control' }
 
         // Process BAMs for STARRPeaker
         STARRPEAKER_PROCBAM(
@@ -116,9 +116,9 @@ workflow STARRSEQ_WORKFLOW {
 
     // MultiQC
     def multiqc_files = channel.empty()
-        .mix(FASTQC.out.zip.map { meta, zip -> zip })
-        .mix(BOWTIE2_ALIGN.out.log.map { meta, log -> log })
-        .mix(PICARD_MARKDUPLICATES.out.metrics.map { meta, metrics -> metrics })
+        .mix(FASTQC.out.zip.map { _meta, zip -> zip })
+        .mix(BOWTIE2_ALIGN.out.log.map { _meta, log -> log })
+        .mix(PICARD_MARKDUPLICATES.out.metrics.map { _meta, metrics -> metrics })
         .collect()
 
     MULTIQC(

@@ -3,7 +3,7 @@ process DUPRADAR {
     label 'process_medium'
 
     conda 'bioconda::bioconductor-dupradar=1.26.0'
-    container "${params.dupradar_container ?: 'biocontainers/bioconductor-dupradar:1.26.0--r41hdfd78af_0'}"
+    container (params.dupradar_container ?: 'biocontainers/bioconductor-dupradar:1.26.0--r41hdfd78af_0')
 
     input:
     tuple val(meta), path(bam), path(bai)

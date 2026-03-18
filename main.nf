@@ -13,7 +13,7 @@ include { CAPSTARRSEQ_WORKFLOW  } from './workflows/capstarrseq'
 
 // Main workflow
 workflow {
-    
+    main:
     // Print pipeline header
     log.info """
         ==============================================
@@ -25,6 +25,12 @@ workflow {
         Reference Genome: ${params.genome}
         ==============================================
         """.stripIndent()
+    
+    // Validate required parameters
+    if (!params.input) {
+        log.error "ERROR: --input parameter is required!"
+        exit 1
+    }
     
     // Create input channel from samplesheet or directory
     def ch_input = params.input.endsWith('.csv') ?
@@ -52,24 +58,11 @@ workflow {
                 ]
                 tuple(meta, files)
             }
-    main:
+    
     // Run appropriate workflow based on mode
     if (params.capstarrseq_mode) {
         CAPSTARRSEQ_WORKFLOW(ch_input)
     } else {
         STARRSEQ_WORKFLOW(ch_input)
     }
-    
-    onComplete:
-    log.info ""
-    log.info "Pipeline completed at: ${workflow.complete}"
-    log.info "Execution status: ${workflow.success ? 'SUCCESS' : 'FAILED'}"
-    log.info "Execution duration: ${workflow.duration}"
-    log.info "Output directory: ${params.outdir}"
-    log.info ""
-
-    onError:
-    log.error "Pipeline execution failed!"
-    log.error "Error message: ${workflow.errorMessage}"
-    log.error "Error report: ${workflow.errorReport}"
 }

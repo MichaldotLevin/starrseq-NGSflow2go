@@ -3,7 +3,7 @@ process CUTADAPT {
     label 'process_medium'
 
     conda 'bioconda::cutadapt=4.4'
-    container "${params.cutadapt_container ?: 'biocontainers/cutadapt:4.4--py39hf95cd2a_1'}"
+    container (params.cutadapt_container ?: 'biocontainers/cutadapt:4.4--py39hf95cd2a_1')
 
     input:
     tuple val(meta), path(reads)

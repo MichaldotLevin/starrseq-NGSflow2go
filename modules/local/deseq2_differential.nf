@@ -2,7 +2,7 @@ process DESEQ2_DIFFERENTIAL {
     label 'process_medium'
 
     conda 'bioconda::bioconductor-deseq2=1.36.0'
-    container "${params.deseq2_container ?: 'biocontainers/bioconductor-deseq2:1.36.0--r41hdfd78af_0'}"
+    container (params.deseq2_container ?: 'biocontainers/bioconductor-deseq2:1.36.0--r41hdfd78af_0')
 
     input:
     path counts

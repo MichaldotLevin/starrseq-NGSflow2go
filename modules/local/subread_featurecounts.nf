@@ -3,7 +3,7 @@ process SUBREAD_FEATURECOUNTS {
     label 'process_medium'
 
     conda 'bioconda::subread=2.0.4'
-    container "${params.subread_container ?: 'biocontainers/subread:2.0.4--h7132678_0'}"
+    container (params.subread_container ?: 'biocontainers/subread:2.0.4--h7132678_0')
 
     input:
     tuple val(meta), path(bam), path(bai)

@@ -1,0 +1,16 @@
+# Nextflow runtime files
+.nextflow/
+.nextflow.log*
+work/
+results/
+
+# Temporary files
+*.tmp
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

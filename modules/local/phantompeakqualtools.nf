@@ -3,7 +3,7 @@ process PHANTOMPEAKQUALTOOLS {
     label 'process_medium'
 
     conda 'bioconda::phantompeakqualtools=1.2.2'
-    container "${params.phantompeakqualtools_container ?: 'biocontainers/phantompeakqualtools:1.2.2--hdfd78af_2'}"
+    container (params.phantompeakqualtools_container ?: 'biocontainers/phantompeakqualtools:1.2.2--hdfd78af_2')
 
     input:
     tuple val(meta), path(bam), path(bai)

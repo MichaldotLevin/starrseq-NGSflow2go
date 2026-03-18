@@ -3,7 +3,7 @@ process FASTQC {
     label 'process_medium'
 
     conda 'bioconda::fastqc=0.12.1'
-    container "${params.fastqc_container ?: 'biocontainers/fastqc:0.12.1--hdfd78af_0'}"
+    container (params.fastqc_container ?: 'biocontainers/fastqc:0.12.1--hdfd78af_0')
 
     input:
     tuple val(meta), path(reads)

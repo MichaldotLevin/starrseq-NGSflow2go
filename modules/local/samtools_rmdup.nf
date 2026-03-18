@@ -3,7 +3,7 @@ process SAMTOOLS_RMDUP {
     label 'process_medium'
 
     conda 'bioconda::samtools=1.17'
-    container "${params.samtools_container ?: 'biocontainers/samtools:1.17--h00cdaf9_0'}"
+    container (params.samtools_container ?: 'biocontainers/samtools:1.17--h00cdaf9_0')
 
     input:
     tuple val(meta), path(bam)

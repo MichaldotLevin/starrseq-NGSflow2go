@@ -48,26 +48,49 @@ nextflow run main.nf -params-file params_examples/starrseq_example.yaml -profile
 
 **Use this for**: Testing the pipeline installation or running on small test datasets.
 
+### 4. `custom_registry_example.yaml`
+**Custom container registry configuration** demonstrating:
+- Registry/name/tag format for containers
+- Custom registry usage (e.g., GitLab registry, private registry)
+- Mixed registry support (different registries for different tools)
+- Both expanded and compact YAML formats
+
+**Use this for**: Deploying with private or institutional container registries.
+
 ## Customizing Parameters
 
 ### 1. Container Images
-All example files include explicit container specifications using BioContainers. You can:
-- **Keep defaults**: Use the BioContainers images specified in the examples (recommended)
-- **Use Wave**: Replace with Wave-built containers for optimized performance
-- **Custom registry**: Specify your own container registry
+The pipeline supports two container specification formats:
 
+#### Format 1: Simple String (Original)
 ```yaml
-# Default BioContainers (recommended)
+# BioContainers
 fastqc_container: 'biocontainers/fastqc:0.12.1--hdfd78af_0'
 
 # Wave container
 fastqc_container: 'community.wave.seqera.io/library/fastqc:0.12.1--abc123'
 
-# Custom registry
+# Docker Hub
 fastqc_container: 'your-registry.io/fastqc:custom'
 ```
 
-See the main `params.yaml` file for complete container documentation and all available tools.
+#### Format 2: Registry/Name/Tag Map (New)
+```yaml
+# Expanded format (recommended for readability)
+fastqc_container:
+  name: 'fastqc'
+  tag: '0.11.9r0'
+  registry: 'registry.gitlab.rlp.net/imbforge/imb-registry'
+
+# Compact single-line format
+fastqc_container: { name: 'fastqc', tag: '0.11.9r0', registry: 'registry.gitlab.rlp.net/imbforge/imb-registry' }
+```
+
+**When to use each format:**
+- **Simple string**: Quick setup, using public registries (BioContainers, Docker Hub, Wave)
+- **Map format**: Custom/private registries, institutional deployments, version management
+
+See `custom_registry_example.yaml` for a complete example using the map format, or the main `params.yaml` file for complete container documentation.
 
 ### 2. File Paths and Basic Setup
 1. **Copy the template**: Start with the main `params.yaml` file or one of the examples

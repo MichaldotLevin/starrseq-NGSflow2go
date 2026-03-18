@@ -3,7 +3,7 @@ process PICARD_MARKDUPLICATES {
     label 'process_medium'
 
     conda 'bioconda::picard=3.0.0'
-    container "${params.picard_container ?: 'biocontainers/picard:3.0.0--hdfd78af_1'}"
+    container (params.picard_container ?: 'biocontainers/picard:3.0.0--hdfd78af_1')
 
     input:
     tuple val(meta), path(bam)
